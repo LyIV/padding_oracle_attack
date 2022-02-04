@@ -8,7 +8,14 @@ async fn main() {
 
     let admin_token: Vec<u8> = disguised_admin(token.clone());
 
-    let msg = check_token(&admin_token).await;
+    let mut msg = check_token(&admin_token).await;
+    println!("\n=== response ===");
+    println!("{}", &msg);
+
+
+    let tampered_token: Vec<u8> = append_value(token.clone(), b" \"flag\": true }");
+
+    msg = check_token(&tampered_token).await;
     println!("\n=== response ===");
     println!("{}", &msg);
 }
@@ -16,6 +23,17 @@ async fn main() {
 fn disguised_admin(mut token: Vec<u8>) -> Vec<u8> {
     token[6] ^= b'9';
     token[6] ^= b'0';
+
+    token
+}
+
+fn append_value(mut token:Vec<u8>, value: &[u8]) -> Vec<u8> {
+    let mut value_vec: Vec<u8> = value.to_vec();
+
+    token[21] ^= b'}';
+    token[21] ^= b',';
+
+    token.append(&mut value_vec);
 
     token
 }
