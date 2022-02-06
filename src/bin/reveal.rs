@@ -12,6 +12,7 @@ async fn main() {
     println!("\n=== plain text ===");
     let plain_text: Vec<u8> = reveal_plain_text(&token).await;
     println!("\n{:02x?}", &plain_text);
+    println!("\n{}", String::from_utf8_lossy(&plain_text));
 }
 
 async fn reveal_plain_text(token: &Vec<u8>) -> Vec<u8> {
